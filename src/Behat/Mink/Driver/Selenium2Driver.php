@@ -2,9 +2,7 @@
 
 namespace Behat\Mink\Driver;
 
-use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\DriverException;
-use Behat\Mink\Session;
 use WebDriver\Exception\UnknownError;
 use WebDriver\Key;
 use WebDriver\WebDriver;
@@ -24,12 +22,6 @@ use WebDriver\WebDriver;
  */
 class Selenium2Driver extends CoreDriver
 {
-    /**
-     * The current Mink session
-     * @var \Behat\Mink\Session
-     */
-    private $session;
-
     /**
      * Whether the browser has been started
      * @var Boolean
@@ -103,7 +95,7 @@ class Selenium2Driver extends CoreDriver
 
     /**
      * Sets the desired capabilities - called on construction.  If null is provided, will set the
-     * defaults as dsesired.
+     * defaults as desired.
      *
      * See http://code.google.com/p/selenium/wiki/DesiredCapabilities
      *
@@ -260,14 +252,6 @@ class Selenium2Driver extends CoreDriver
             'script' => $script,
             'args'   => array(array('ELEMENT' => $elementID))
         ));
-    }
-
-    /**
-     * @see Behat\Mink\Driver\DriverInterface::setSession()
-     */
-    public function setSession(Session $session)
-    {
-        $this->session = $session;
     }
 
     /**
@@ -498,11 +482,7 @@ class Selenium2Driver extends CoreDriver
     }
 
     /**
-     * Finds elements with specified XPath query.
-     *
-     * @param   string  $xpath
-     *
-     * @return  array           array of Behat\Mink\Element\NodeElement
+     * {@inheritdoc}
      */
     public function find($xpath)
     {
@@ -510,7 +490,7 @@ class Selenium2Driver extends CoreDriver
 
         $elements = array();
         foreach ($nodes as $i => $node) {
-            $elements[] = new NodeElement(sprintf('(%s)[%d]', $xpath, $i+1), $this->session);
+            $elements[] = sprintf('(%s)[%d]', $xpath, $i+1);
         }
 
         return $elements;
